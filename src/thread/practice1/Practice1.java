@@ -50,6 +50,8 @@ class Consumer extends Thread{
         while(!Thread.currentThread().isInterrupted()) {
             synchronized(market){
                 if(market.peek() == null) {
+                // peek(): 맨 첫번쨰의 값을 반환, 비어있으면 null반환
+                // element(): 큐의 맨 앞의 값 반환, 비어있으면 exception 발생
                     try {
                         System.out.println(name + " 대기");
                         market.wait(); // 대기
@@ -60,6 +62,9 @@ class Consumer extends Thread{
                 }
                 else {
                     item = market.poll();
+                    // poll(): 큐의 첫번째 요소를 삭제하고, 반환한다.
+                    // remove:() 큐의 첫번째 요소를 삭제한다.
+                    // clear(): 큐를 그냥 비운다.
                     System.out.println(name + ": " + item +"소비");
                     totalItem++;
                 }
@@ -89,6 +94,8 @@ class Producer extends Thread{
     private void putItem(int itemNum){
         synchronized (market){
             market.offer(itemNum);
+            // offer(): 큐 맨 뒤에 값 삽입, 추가 성공 시 true, 실패시 false
+            // add(): 큐 맨 뒤에 값 삽입, 추가 성공 시 true. 실패시 exception발생
             System.out.println("생산: "+itemNum);
             market.notify();
         }
